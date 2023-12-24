@@ -37,8 +37,8 @@ public class ItemStorageImpl implements ItemStorage {
     @Override
     public Item updateItem(long userId, Item item) {
         if (!items.containsKey(item.getId())) {
-            log.info("Не правильно передан  id = " + item.getId() + " вещи");
-            throw new NoDataRequestedInStorageException("Не правильно передан  id = " + item.getId() + " вещи");
+            log.info("Неправильно передан  id = " + item.getId() + " вещи");
+            throw new NoDataRequestedInStorageException("Неправильно передан  id = " + item.getId() + " вещи");
         }
         if (userId != item.getOwner().getId()) {
             log.info("Заданы неверные параметры для обновления");
@@ -70,7 +70,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     @Override
-    public Item getItemBuId(long id) {
+    public Item getItemById(long id) {
         if (!items.containsKey(id)) {
             log.info("Не найдена вещь с таким id = " + id);
             throw new NoDataRequestedInStorageException("Не найдена вещь с таким id = " + id);

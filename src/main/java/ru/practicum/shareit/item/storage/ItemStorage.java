@@ -15,6 +15,6 @@ public interface ItemStorage {
 
     List<Item> searchingForItem(String text);
 
-    Item getItemBuId(long id);
+    Item getItemById(long id);
 
 }

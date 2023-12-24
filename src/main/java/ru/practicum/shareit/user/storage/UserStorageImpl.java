@@ -14,7 +14,6 @@ public class UserStorageImpl implements UserStorage {
     private final Map<Long, User> users = new HashMap<>();
     private long userId = 0;
 
-
     @Override
     public Collection<User> getAllUsers() {
         return users.values();
@@ -72,5 +71,4 @@ public class UserStorageImpl implements UserStorage {
             throw new NoDataRequestedInStorageException("Пользователя с таким id = " + checkId + " не существует");
         }
     }
-
 }

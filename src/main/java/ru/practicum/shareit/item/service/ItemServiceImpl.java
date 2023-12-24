@@ -30,8 +30,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item updateItem(long id, long userId, ItemDto itemDto) {
-        if (userId != itemStorage.getItemBuId(id).getOwner().getId()) {
-            log.info("Изменения пытается внесли не собственник вещи");
+        if (userId != itemStorage.getItemById(id).getOwner().getId()) {
+            log.info("Изменения пытается внести не собственник вещи");
             throw new NotFoundException("Изменения в товар может вносить только его собственник");
         }
         User user = userStorage.getUserById(userId);
@@ -43,7 +43,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item getItem(long id, long userId) {
         userStorage.getUserById(userId);
-        return itemStorage.getItemBuId(id);
+        return itemStorage.getItemById(id);
     }
 
     @Override
