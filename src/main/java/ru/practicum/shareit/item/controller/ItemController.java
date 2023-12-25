@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/items")
 @AllArgsConstructor
 public class ItemController {
-    private final ItemService itemService;
 
     private static final String USER_ID = "X-Sharer-User-Id";
+
+    private final ItemService itemService;
 
     @PostMapping
     public ItemDto addNewItem(@RequestHeader(USER_ID) long userId, @Valid @RequestBody ItemDto itemDto) {

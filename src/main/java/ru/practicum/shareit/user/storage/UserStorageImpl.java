@@ -35,20 +35,21 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        checkUser(user.getId());
+        long userId = user.getId();
+        checkUser(userId);
         if (user.getEmail() != null) {
             for (User value : users.values()) {
-                if (Objects.equals(value.getEmail(), user.getEmail()) && user.getId() != value.getId()) {
+                if (Objects.equals(value.getEmail(), user.getEmail()) && userId != value.getId()) {
                     throw new NoDataRequestedInStorageException("Уже существует пользователь с почтой = " + user.getEmail());
                 }
             }
-            users.get(user.getId()).setEmail(user.getEmail());
+            users.get(userId).setEmail(user.getEmail());
         }
         if (user.getName() != null) {
-            users.get(user.getId()).setName(user.getName());
+            users.get(userId).setName(user.getName());
         }
-        log.info("Обновлены данные пользователя с id = " + user.getId());
-        return users.get(user.getId());
+        log.info("Обновлены данные пользователя с id = " + userId);
+        return users.get(userId);
     }
 
     @Override
