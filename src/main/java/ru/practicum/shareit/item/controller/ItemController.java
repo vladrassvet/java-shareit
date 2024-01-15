@@ -2,10 +2,15 @@ package ru.practicum.shareit.item.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.comment.CommentDto;
+import ru.practicum.shareit.item.comment.CommentDtoInput;
+import ru.practicum.shareit.item.comment.CommentMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.dto.ItemWithCommentsAndBookings;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
+
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,16 +39,13 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ItemDto getItemById(@PathVariable long id, @RequestHeader(USER_ID) long userId) {
-        Item item = itemService.getItem(id, userId);
-        return ItemMapper.toItemDto(item);
+    public ItemWithCommentsAndBookings getItemById(@PathVariable long id, @RequestHeader(USER_ID) long userId) {
+        return itemService.getItem(id, userId);
     }
 
     @GetMapping
-    public List<ItemDto> getUserAllItems(@RequestHeader(USER_ID) long userId) {
-        return itemService.getUserItems(userId).stream()
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+    public List<ItemWithCommentsAndBookings> getUserAllItems(@RequestHeader(USER_ID) Long userId) {
+        return itemService.getUserItems(userId);
     }
 
     @GetMapping("/search")
@@ -51,5 +53,11 @@ public class ItemController {
         return itemService.searchItem(text).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@PathVariable long itemId,
+                                 @RequestHeader(USER_ID) long userId, @Valid @RequestBody CommentDtoInput commentDtoInput) {
+        return CommentMapper.toCommentDto(itemService.addComment(userId, itemId, commentDtoInput));
     }
 }
