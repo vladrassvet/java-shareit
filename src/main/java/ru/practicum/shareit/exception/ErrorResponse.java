@@ -1,17 +1,11 @@
 package ru.practicum.shareit.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Slf4j
+@AllArgsConstructor
+@Getter
 public class ErrorResponse {
+
     private final String error;
-
-    public ErrorResponse(String error) {
-        this.error = error;
-        log.info("Произошла ошибка: {}", error);
-    }
-
-    public String getError() {
-        return error;
-    }
 }
