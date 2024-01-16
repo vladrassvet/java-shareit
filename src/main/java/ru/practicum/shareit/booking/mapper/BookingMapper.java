@@ -36,7 +36,6 @@ public class BookingMapper {
     }
 
     public static Booking toBooking(BookingDtoRequest bookingDtoRequest, Item item, User user, BookingStatus bookingStatus) {
-
         return Booking.builder()
                 .start(bookingDtoRequest.getStart())
                 .end(bookingDtoRequest.getEnd())
@@ -47,7 +46,6 @@ public class BookingMapper {
     }
 
     public static BookingShort toBookingShort(Booking booking) {
-
         return BookingShort.builder()
                 .id(booking.getId())
                 .bookerId(booking.getBookingUser().getId())

@@ -54,8 +54,7 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDtoResp> getAllItemsUser(@RequestHeader(USER_ID) long userId,
                                                 @RequestParam(name = "state", defaultValue = "ALL") String state) {
-        List<Booking> bookings = bookingService.getUserItems(userId, state);
-        return bookings.stream()
+        return bookingService.getUserItems(userId, state).stream()
                 .map(BookingMapper::toResponse)
                 .collect(Collectors.toList());
     }

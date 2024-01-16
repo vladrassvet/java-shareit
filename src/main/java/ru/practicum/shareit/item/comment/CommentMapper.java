@@ -17,7 +17,6 @@ public class CommentMapper {
                 .authorName(comment.getAuthor().getName())
                 .created(comment.getCreated())
                 .build();
-
     }
 
     public static Comment toComment(CommentDtoInput commentDtoInput, Item item, User user) {
