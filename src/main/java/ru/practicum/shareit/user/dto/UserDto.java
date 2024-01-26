@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder(toBuilder = true)
 public class UserDto {
-
     private long id;
     @Email
     @NotNull

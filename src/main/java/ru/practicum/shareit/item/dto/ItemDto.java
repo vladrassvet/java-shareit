@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder(toBuilder = true)
 public class ItemDto {
-
     private long id;
     @NotNull
     @NotBlank
@@ -18,4 +18,6 @@ public class ItemDto {
     private String description;
     @NotNull
     private Boolean available;
+    @Nullable
+    private Long requestId;
 }

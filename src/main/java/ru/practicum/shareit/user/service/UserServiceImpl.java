@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exсeption.NotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+
 
 import java.util.Collection;
 
@@ -30,8 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        checkUser(user.getId());
-        User oldUser = getUserById(user.getId());
+        // checkUser(user.getId());
+        User oldUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new NotFoundException("Пользователя с таким id = " + user.getId() + "  не существует"));
         if (user.getName() == null) {
             user.setName(oldUser.getName());
         }

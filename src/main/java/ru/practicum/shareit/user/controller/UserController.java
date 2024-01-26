@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     @GetMapping
@@ -34,7 +33,7 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public UserDto updateUserById(@PathVariable long id, @RequestBody UserDto userDto) {
-        User user = userService.updateUser(UserMapper.userToDtoDyId(id, userDto));
+        User user = userService.updateUser(UserMapper.userDtoToUserByid(id, userDto));
         return UserMapper.userToDto(user);
     }
 
