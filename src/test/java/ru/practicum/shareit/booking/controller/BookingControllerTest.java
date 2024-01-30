@@ -59,7 +59,7 @@ class BookingControllerTest {
     void setUp() {
         itemRequest = itemRequestBuilder();
         bookingUser = bookingUserBuilder();
-        user =  userBuilder();
+        user = userBuilder();
         item = itemBuilder();
         itemDto = ItemMapper.toItemDto(item);
         bookingDtoRequest = bookingDtoRequestBuilder();
@@ -196,7 +196,7 @@ class BookingControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    private ItemRequest itemRequestBuilder(){
+    private ItemRequest itemRequestBuilder() {
         ItemRequest itemRequested = ItemRequest.builder()
                 .id(1L)
                 .description("запрос")
@@ -206,7 +206,7 @@ class BookingControllerTest {
         return itemRequested;
     }
 
-    private User bookingUserBuilder(){
+    private User bookingUserBuilder() {
         User user2 = User.builder()
                 .id(1L)
                 .email("alex@yandex.ru")
@@ -215,7 +215,7 @@ class BookingControllerTest {
         return user2;
     }
 
-    private User userBuilder(){
+    private User userBuilder() {
         User user3 = User.builder()
                 .id(2L)
                 .email("alexs@yandex.ru")
@@ -224,7 +224,7 @@ class BookingControllerTest {
         return user3;
     }
 
-    private Item itemBuilder(){
+    private Item itemBuilder() {
         Item item2 = Item.builder()
                 .id(1L)
                 .name("новый стул")
@@ -236,7 +236,7 @@ class BookingControllerTest {
         return item2;
     }
 
-    private BookingDtoRequest bookingDtoRequestBuilder(){
+    private BookingDtoRequest bookingDtoRequestBuilder() {
         BookingDtoRequest dto = BookingDtoRequest.builder()
                 .itemId(1L)
                 .start(LocalDateTime.now().plusHours(1))
