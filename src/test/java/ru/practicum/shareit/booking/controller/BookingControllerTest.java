@@ -57,37 +57,12 @@ class BookingControllerTest {
 
     @BeforeEach
     void setUp() {
-        itemRequest = ItemRequest.builder()
-                .id(1L)
-                .description("запрос")
-                .created(LocalDateTime.now())
-                .requestor(new User())
-                .build();
-        bookingUser = User.builder()
-                .id(1L)
-                .email("alex@yandex.ru")
-                .name("alex")
-                .build();
-        user = User.builder()
-                .id(2L)
-                .email("alexs@yandex.ru")
-                .name("alexs")
-                .build();
-        item = Item.builder()
-                .id(1L)
-                .name("новый стул")
-                .description("удобный стул")
-                .available(true)
-                .owner(user)
-                .request(itemRequest)
-                .build();
+        itemRequest = itemRequestBuilder();
+        bookingUser = bookingUserBuilder();
+        user =  userBuilder();
+        item = itemBuilder();
         itemDto = ItemMapper.toItemDto(item);
-        bookingDtoRequest = BookingDtoRequest.builder()
-                .itemId(1L)
-                .start(LocalDateTime.now().plusHours(1))
-                .end(LocalDateTime.now().plusDays(1))
-                .build();
-
+        bookingDtoRequest = bookingDtoRequestBuilder();
         booking = BookingMapper.toBooking(bookingDtoRequest, item, bookingUser, BookingStatus.WAITING);
         bookingDtoResp = BookingMapper.toResponse(booking);
     }
@@ -219,5 +194,54 @@ class BookingControllerTest {
                         .param("size", "15"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    private ItemRequest itemRequestBuilder(){
+        ItemRequest itemRequested = ItemRequest.builder()
+                .id(1L)
+                .description("запрос")
+                .created(LocalDateTime.now())
+                .requestor(new User())
+                .build();
+        return itemRequested;
+    }
+
+    private User bookingUserBuilder(){
+        User user2 = User.builder()
+                .id(1L)
+                .email("alex@yandex.ru")
+                .name("alex")
+                .build();
+        return user2;
+    }
+
+    private User userBuilder(){
+        User user3 = User.builder()
+                .id(2L)
+                .email("alexs@yandex.ru")
+                .name("alexs")
+                .build();
+        return user3;
+    }
+
+    private Item itemBuilder(){
+        Item item2 = Item.builder()
+                .id(1L)
+                .name("новый стул")
+                .description("удобный стул")
+                .available(true)
+                .owner(user)
+                .request(itemRequest)
+                .build();
+        return item2;
+    }
+
+    private BookingDtoRequest bookingDtoRequestBuilder(){
+        BookingDtoRequest dto = BookingDtoRequest.builder()
+                .itemId(1L)
+                .start(LocalDateTime.now().plusHours(1))
+                .end(LocalDateTime.now().plusDays(1))
+                .build();
+        return dto;
     }
 }
