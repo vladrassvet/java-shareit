@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class BookingDtoResp {
-
     private long id;
     @NotNull
     @FutureOrPresent

@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingShort;
@@ -17,6 +19,8 @@ import ru.practicum.shareit.item.dto.ItemWithCommentsAndBookings;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.ItemRequestRepository;
+import ru.practicum.shareit.request.dto.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -29,19 +33,28 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class ItemServiceImpl implements ItemService {
-
     private final ItemRepository itemRepository;
     private final UserService userService;
     private final CommentRepository commentRepository;
 
     private final BookingRepository bookingRepository;
 
+    private final ItemRequestRepository itemRequestRepository;
+
     @Override
     public Item addItem(long userId, ItemDto itemDto) {
         checkUser(userId);
         User user = userService.getUserById(userId);
-        Item item = ItemMapper.toItem(user, itemDto);
-        return itemRepository.save(item);
+        Item actualItem;
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = itemRequestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Вещи с таким id = "
+                            + itemDto.getRequestId() + "  не существует"));
+            actualItem = ItemMapper.toItem(user, itemDto, itemRequest);
+        } else {
+            actualItem = ItemMapper.toItemWithId(itemDto.getId(), user, itemDto);
+        }
+        return itemRepository.save(actualItem);
     }
 
     @Override
@@ -78,26 +91,22 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemWithCommentsAndBookings> getUserItems(Long userId) {
+    public List<ItemWithCommentsAndBookings> getUserItems(Long userId, Integer from, Integer size) {
         User user = userService.getUserById(userId);
-        return itemRepository.findAllByOwner(user)
+        Pageable pageable = PageRequest.of(from / size, size);
+        return itemRepository.findAllByOwnerId(userId, pageable)
                 .stream()
                 .map(item -> addNewEntity(item, userId))
                 .collect(Collectors.toList());
-
     }
 
     @Override
-    public List<Item> searchItem(String text) {
+    public List<Item> searchItem(String text, Integer from, Integer size) {
         if (text.isEmpty()) {
             return new ArrayList<>();
         }
-        return itemRepository.findAll()
-                .stream()
-                .filter(item -> (item.getName().toLowerCase().contains(text.toLowerCase()) ||
-                        item.getDescription().toLowerCase().contains(text.toLowerCase())))
-                .filter(item -> item.getAvailable().equals(true))
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(from / size, size);
+        return itemRepository.searchWithPagination(text, pageable);
     }
 
     @Override
@@ -107,13 +116,13 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Вещи с таким id = " + itemId + "  не существует"));
         User user = userService.getUserById(userId);
         Comment comment;
-        if (bookingRepository.findFirstByBookingUserIdAndItemIdAndEndIsBeforeOrderByEndDesc(userId, itemId, LocalDateTime.now()) != null) {
+        if (bookingRepository.findFirstByBookingUserIdAndItemIdAndEndIsBeforeOrderByEndDesc(userId, itemId,
+                LocalDateTime.now()) != null) {
             comment = CommentMapper.toComment(commentDtoInput, item, user);
         } else {
             throw new ValidationException("Пользователь не может оставить комментарий");
         }
         return commentRepository.save(comment);
-
     }
 
     private void checkUser(long userId) {

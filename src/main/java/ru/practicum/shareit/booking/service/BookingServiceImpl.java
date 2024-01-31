@@ -2,6 +2,8 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.enums.BookingStatus;
@@ -14,7 +16,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,21 +25,19 @@ import java.util.List;
 @AllArgsConstructor
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
-    private final UserService userService;
-
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
     @Override
     public Booking addBooking(long userId, BookingDtoRequest bookingDtoRequest) {
-        checkUser(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя с таким id = " + userId + "  не существует"));
         LocalDateTime start = bookingDtoRequest.getStart();
         LocalDateTime end = bookingDtoRequest.getEnd();
         if (start.isAfter(end) || start.equals(end)) {
             log.info("Некорректно заданы параметры бронирования");
             throw new ValidationException("Некорректно заданы параметры бронирования");
         }
-        User user = userService.getUserById(userId);
         Item item = itemRepository.findById(bookingDtoRequest.getItemId())
                 .orElseThrow(() -> new NotFoundException("Не найдена вещь с  id " + bookingDtoRequest.getItemId()));
         if (user.getId() == item.getOwner().getId()) {
@@ -56,7 +55,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking getStatus(long bookingId, long userId, Boolean approved) {
-        checkUser(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя с таким id = " + userId + "  не существует"));
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Не найдено бронирование с  id " + bookingId));
         Item item = booking.getItem();
@@ -81,7 +81,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking getBooking(long bookingId, long userId) {
-        checkUser(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя с таким id = " + userId + "  не существует"));
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Не найдено бронирование с  id " + bookingId));
         Item item = booking.getItem();
@@ -93,32 +94,33 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getUserBookings(long userId, String status) {
-        checkUser(userId);
-        User user = userService.getUserById(userId);
+    public List<Booking> getUserBookings(long userId, String status, Integer from, Integer size) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя с таким id = " + userId + "  не существует"));
         LocalDateTime dateTime = LocalDateTime.now();
+        Pageable pageable = PageRequest.of(from / size, size);
         List<Booking> bookingList;
         switch (status) {
             case "ALL":
-                bookingList = bookingRepository.findAllByBookingUserOrderByStartDesc(user);
+                bookingList = bookingRepository.findAllByBookingUserOrderByStartDesc(user, pageable);
                 break;
             case "CURRENT":
                 bookingList = bookingRepository.findAllByBookingUserAndStartIsBeforeAndEndIsAfterOrderByStart(user,
-                        dateTime, dateTime);
+                        dateTime, dateTime, pageable);
                 break;
             case "FUTURE":
-                bookingList = bookingRepository.findAllByBookingUserAndStartIsAfterOrderByStartDesc(user, dateTime);
+                bookingList = bookingRepository.findAllByBookingUserAndStartIsAfterOrderByStartDesc(user, dateTime, pageable);
                 break;
             case "PAST":
-                bookingList = bookingRepository.findAllByBookingUserAndEndIsBeforeOrderByStartDesc(user, dateTime);
+                bookingList = bookingRepository.findAllByBookingUserAndEndIsBeforeOrderByStartDesc(user, dateTime, pageable);
                 break;
             case "WAITING":
                 bookingList = bookingRepository.findAllByBookingUserAndStatusEqualsOrderByStartDesc(user,
-                        BookingStatus.WAITING);
+                        BookingStatus.WAITING, pageable);
                 break;
             case "REJECTED":
                 bookingList = bookingRepository.findAllByBookingUserAndStatusEqualsOrderByStartDesc(user,
-                        BookingStatus.REJECTED);
+                        BookingStatus.REJECTED, pageable);
                 break;
             default:
                 log.info("Передан неверный статус");
@@ -128,44 +130,38 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getUserItems(long userId, String status) {
-        checkUser(userId);
-        User user = userService.getUserById(userId);
+    public List<Booking> getUserItems(long userId, String status, Integer from, Integer size) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя с таким id = " + userId + "  не существует"));
         LocalDateTime dateTime = LocalDateTime.now();
+        Pageable pageable = PageRequest.of(from / size, size);
         List<Booking> bookingList;
         switch (status) {
             case "ALL":
-                bookingList = bookingRepository.findAllByItemOwnerOrderByStartDesc(user);
+                bookingList = bookingRepository.findAllByItemOwnerOrderByStartDesc(user, pageable);
                 break;
             case "CURRENT":
                 bookingList = bookingRepository.findAllByItemOwnerAndStartIsBeforeAndEndIsAfterOrderByStart(user,
-                        dateTime, dateTime);
+                        dateTime, dateTime, pageable);
                 break;
             case "FUTURE":
-                bookingList = bookingRepository.findAllByItemOwnerAndStartIsAfterOrderByStartDesc(user, dateTime);
+                bookingList = bookingRepository.findAllByItemOwnerAndStartIsAfterOrderByStartDesc(user, dateTime, pageable);
                 break;
             case "PAST":
-                bookingList = bookingRepository.findAllByItemOwnerAndEndIsBeforeOrderByStartDesc(user, dateTime);
+                bookingList = bookingRepository.findAllByItemOwnerAndEndIsBeforeOrderByStartDesc(user, dateTime, pageable);
                 break;
             case "WAITING":
                 bookingList = bookingRepository.findAllByItemOwnerAndStatusEqualsOrderByStartDesc(user,
-                        BookingStatus.WAITING);
+                        BookingStatus.WAITING, pageable);
                 break;
             case "REJECTED":
                 bookingList = bookingRepository.findAllByItemOwnerAndStatusEqualsOrderByStartDesc(user,
-                        BookingStatus.REJECTED);
+                        BookingStatus.REJECTED, pageable);
                 break;
             default:
                 log.info("Передан неверный статус");
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
         return bookingList;
-    }
-
-    private void checkUser(long checkId) {
-        if (!userRepository.existsById(checkId)) {
-            log.info("Пользователя с таким id = " + checkId + " не существует");
-            throw new NotFoundException("Пользователя с таким id = " + checkId + " не существует");
-        }
     }
 }

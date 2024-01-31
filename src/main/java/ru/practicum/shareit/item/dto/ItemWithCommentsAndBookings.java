@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @Builder
 public class ItemWithCommentsAndBookings {
-
     private long id;
     private String name;
     private String description;
@@ -18,5 +17,4 @@ public class ItemWithCommentsAndBookings {
     private BookingShort lastBooking;
     private BookingShort nextBooking;
     private List<CommentDto> comments;
-
 }
