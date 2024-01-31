@@ -18,13 +18,13 @@ import java.time.LocalDateTime;
 public class ItemRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(length = 10)
+    @Column
     private long id;
-    @Column(length = 255)
+    @Column
     private String description;
     @OneToOne
     @JoinColumn(name = "requestor_id")
     public User requestor;
-    @Column(length = 40)
+    @Column
     private LocalDateTime created;
 }
