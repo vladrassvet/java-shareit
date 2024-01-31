@@ -14,32 +14,32 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByBookingUserOrderByStartDesc(User user, Pageable pageable);
 
     List<Booking> findAllByBookingUserAndStartIsBeforeAndEndIsAfterOrderByStart(User user,
-                                                                                LocalDateTime startDate, LocalDateTime endDate,
+                                                                                LocalDateTime now1, LocalDateTime now2,
                                                                                 Pageable pageable);
 
-    List<Booking> findAllByBookingUserAndStartIsAfterOrderByStartDesc(User user, LocalDateTime startDate, Pageable pageable);
+    List<Booking> findAllByBookingUserAndStartIsAfterOrderByStartDesc(User user, LocalDateTime now, Pageable pageable);
 
-    List<Booking> findAllByBookingUserAndEndIsBeforeOrderByStartDesc(User user, LocalDateTime startDate, Pageable pageable);
+    List<Booking> findAllByBookingUserAndEndIsBeforeOrderByStartDesc(User user, LocalDateTime now, Pageable pageable);
 
     List<Booking> findAllByBookingUserAndStatusEqualsOrderByStartDesc(User user, BookingStatus status, Pageable pageable);
 
     List<Booking> findAllByItemOwnerOrderByStartDesc(User user, Pageable pageable);
 
     List<Booking> findAllByItemOwnerAndStartIsBeforeAndEndIsAfterOrderByStart(User user,
-                                                                              LocalDateTime startDate, LocalDateTime endDate,
+                                                                              LocalDateTime now1, LocalDateTime now2,
                                                                               Pageable pageable);
 
-    List<Booking> findAllByItemOwnerAndStartIsAfterOrderByStartDesc(User user, LocalDateTime startDate, Pageable pageable);
+    List<Booking> findAllByItemOwnerAndStartIsAfterOrderByStartDesc(User user, LocalDateTime now, Pageable pageable);
 
-    List<Booking> findAllByItemOwnerAndEndIsBeforeOrderByStartDesc(User user, LocalDateTime startDate, Pageable pageable);
+    List<Booking> findAllByItemOwnerAndEndIsBeforeOrderByStartDesc(User user, LocalDateTime now, Pageable pageable);
 
     List<Booking> findAllByItemOwnerAndStatusEqualsOrderByStartDesc(User user, BookingStatus status, Pageable pageable);
 
     Booking findFirstByItemIdAndStartIsBeforeOrStartEqualsOrderByStartDesc(long itemId,
-                                                                           LocalDateTime startDate, LocalDateTime endDate);
+                                                                           LocalDateTime now1, LocalDateTime now2);
 
-    Booking findFirstByItemIdAndStartIsAfterOrderByStart(long itemId, LocalDateTime startDate);
+    Booking findFirstByItemIdAndStartIsAfterOrderByStart(long itemId, LocalDateTime now);
 
-    Booking findFirstByBookingUserIdAndItemIdAndEndIsBeforeOrderByEndDesc(long userId, long itemId, LocalDateTime startDate);
+    Booking findFirstByBookingUserIdAndItemIdAndEndIsBeforeOrderByEndDesc(long userId, long itemId, LocalDateTime now);
 
 }

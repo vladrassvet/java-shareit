@@ -174,7 +174,6 @@ class ItemServiceImplTest {
         assertNotNull(item1);
         assertEquals(item.getDescription(), item1.getDescription(), "некорректно отработал метод");
         assertTrue(item1.getName().equals("стул"));
-
     }
 
     @Test

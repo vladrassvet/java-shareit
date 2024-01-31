@@ -192,7 +192,6 @@ class BookingServiceImplTest {
         assertThrows(NotFoundException.class, () -> bookingService.getBooking(booking.getId(), 5));
     }
 
-
     @Test
     void getUserBookings_whenStatusEqualsAll_thenReturnBookingList() {
         Integer from = 1;

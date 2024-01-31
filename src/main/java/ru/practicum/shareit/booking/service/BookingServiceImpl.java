@@ -125,7 +125,6 @@ public class BookingServiceImpl implements BookingService {
             default:
                 log.info("Передан неверный статус");
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
-
         }
         return bookingList;
     }

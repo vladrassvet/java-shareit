@@ -48,9 +48,10 @@ public class BookingController {
     @GetMapping
     public List<BookingDtoResp> getAllBookingsUser(@RequestHeader(USER_ID) long userId,
                                                    @RequestParam(defaultValue = "ALL") String state,
-                                                   @RequestParam(defaultValue = "1") @Min(1) Integer from,
-                                                   @RequestParam(defaultValue = "20") @Min(1) @Max(20) Integer size) {
-        return bookingService.getUserBookings(userId, state, from, size).stream()
+                                                   @Valid @RequestParam(defaultValue = "1") @Min(1) Integer from,
+                                                   @Valid @RequestParam(defaultValue = "20") @Min(1) @Max(20) Integer size) {
+        List<Booking> bookings = bookingService.getUserBookings(userId, state, from, size);
+        return bookings.stream()
                 .map(BookingMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -58,9 +59,10 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDtoResp> getAllItemsUser(@RequestHeader(USER_ID) long userId,
                                                 @RequestParam(defaultValue = "ALL") String state,
-                                                @RequestParam(defaultValue = "1") @Min(1) Integer from,
-                                                @RequestParam(defaultValue = "20") @Min(1) @Max(20) Integer size) {
-        return bookingService.getUserItems(userId, state, from, size).stream()
+                                                @Valid @RequestParam(defaultValue = "1") @Min(1) Integer from,
+                                                @Valid @RequestParam(defaultValue = "20") @Min(1) @Max(20) Integer size) {
+        List<Booking> bookings = bookingService.getUserItems(userId, state, from, size);
+        return bookings.stream()
                 .map(BookingMapper::toResponse)
                 .collect(Collectors.toList());
     }

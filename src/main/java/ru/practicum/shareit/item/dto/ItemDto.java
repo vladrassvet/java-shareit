@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder(toBuilder = true)
 public class ItemDto {
+
     private long id;
     @NotNull
     @NotBlank

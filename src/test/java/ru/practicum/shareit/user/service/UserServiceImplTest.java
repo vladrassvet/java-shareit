@@ -57,7 +57,6 @@ class UserServiceImplTest {
         verify(userRepository, atMost(1)).save(userToSave);
     }
 
-
     @Test
     void updateUser_whenUserFound_thenUpdateUser() {
         long userId = 1L;
@@ -95,6 +94,7 @@ class UserServiceImplTest {
         assertThrows(NotFoundException.class, () -> userService.updateUser(newUser));
         verify(userRepository, never()).save(newUser);
     }
+
 
     @Test
     void getUserById_whenUserFound_thenReturnUser() {

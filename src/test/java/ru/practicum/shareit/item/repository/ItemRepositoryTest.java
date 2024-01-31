@@ -58,7 +58,6 @@ class ItemRepositoryTest {
         itemRepository.save(item);
     }
 
-
     @Test
     void findAllByOwnerId() {
         List<Item> itemList = itemRepository.findAllByOwnerId(user.getId(), PageRequest.of(0, 5));

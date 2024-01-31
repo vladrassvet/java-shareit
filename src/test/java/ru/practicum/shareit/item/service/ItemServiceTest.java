@@ -99,6 +99,7 @@ class ItemServiceTest {
         ItemWithCommentsAndBookings newItem = itemService.getItem(item1.getId(), user.getId());
         assertTrue(newItem.getComments().isEmpty());
         assertTrue(newItem.getLastBooking() == null);
+
     }
 
     @Test

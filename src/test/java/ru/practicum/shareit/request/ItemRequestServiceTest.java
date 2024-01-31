@@ -37,7 +37,6 @@ class ItemRequestServiceTest {
 
     private Item item;
 
-
     private ItemRequestDto itemRequestDto;
     private ItemRequestDto itemRequestDto1;
 

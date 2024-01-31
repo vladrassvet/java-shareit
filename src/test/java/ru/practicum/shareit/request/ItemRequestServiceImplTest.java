@@ -51,13 +51,11 @@ class ItemRequestServiceImplTest {
                 .email("userOwner@yandex.ru")
                 .name("userOwner")
                 .build();
-
         userBooker = User.builder()
                 .id(2L)
                 .email("userBooker@yandex.ru")
                 .name("userBooker")
                 .build();
-
         item = Item.builder()
                 .id(1L)
                 .name("Дрель")
@@ -65,7 +63,6 @@ class ItemRequestServiceImplTest {
                 .available(true)
                 .owner(userOwner)
                 .build();
-
         itemRequest = ItemRequest.builder()
                 .id(1L)
                 .description("itemRequest")
