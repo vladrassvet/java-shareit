@@ -45,7 +45,7 @@ class BookingControllerTest {
     @MockBean
     private BookingService bookingService;
 
-    private static String USER_ID = "X-Sharer-User-Id";
+    private static final String USER_ID = "X-Sharer-User-Id";
     private Booking booking;
     private BookingDtoRequest bookingDtoRequest;
     private BookingDtoResp bookingDtoResp;
@@ -55,7 +55,7 @@ class BookingControllerTest {
     private ItemRequest itemRequest;
     private ItemDto itemDto;
 
-    private ItemRequest itemRequestBuilder(){
+    private ItemRequest itemRequestBuilder() {
         ItemRequest itReq = ItemRequest.builder()
                 .id(1L)
                 .description("запрос")
@@ -65,7 +65,7 @@ class BookingControllerTest {
         return itReq;
     }
 
-    private User bookingUserBuilder(){
+    private User bookingUserBuilder() {
         User us = User.builder()
                 .id(1L)
                 .email("alex@yandex.ru")
@@ -74,7 +74,7 @@ class BookingControllerTest {
         return us;
     }
 
-    private User userBuilder(){
+    private User userBuilder() {
         User us = User.builder()
                 .id(2L)
                 .email("alexs@yandex.ru")
@@ -83,7 +83,7 @@ class BookingControllerTest {
         return us;
     }
 
-    private Item itemBuilder(){
+    private Item itemBuilder() {
         Item it = Item.builder()
                 .id(1L)
                 .name("новый стул")
@@ -95,7 +95,7 @@ class BookingControllerTest {
         return it;
     }
 
-    private BookingDtoRequest bookingDtoRequestBuilder(){
+    private BookingDtoRequest bookingDtoRequestBuilder() {
         BookingDtoRequest data = BookingDtoRequest.builder()
                 .itemId(1L)
                 .start(LocalDateTime.now().plusHours(1))
