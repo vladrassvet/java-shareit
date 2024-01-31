@@ -7,6 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Generated
 public class ItemRequestDto {
     @NotBlank
     private String description;
