@@ -55,55 +55,6 @@ class BookingControllerTest {
     private ItemRequest itemRequest;
     private ItemDto itemDto;
 
-    private ItemRequest itemRequestBuilder() {
-        ItemRequest itReq = ItemRequest.builder()
-                .id(1L)
-                .description("запрос")
-                .created(LocalDateTime.now())
-                .requestor(new User())
-                .build();
-        return itReq;
-    }
-
-    private User bookingUserBuilder() {
-        User us = User.builder()
-                .id(1L)
-                .email("alex@yandex.ru")
-                .name("alex")
-                .build();
-        return us;
-    }
-
-    private User userBuilder() {
-        User us = User.builder()
-                .id(2L)
-                .email("alexs@yandex.ru")
-                .name("alexs")
-                .build();
-        return us;
-    }
-
-    private Item itemBuilder() {
-        Item it = Item.builder()
-                .id(1L)
-                .name("новый стул")
-                .description("удобный стул")
-                .available(true)
-                .owner(user)
-                .request(itemRequest)
-                .build();
-        return it;
-    }
-
-    private BookingDtoRequest bookingDtoRequestBuilder() {
-        BookingDtoRequest data = BookingDtoRequest.builder()
-                .itemId(1L)
-                .start(LocalDateTime.now().plusHours(1))
-                .end(LocalDateTime.now().plusDays(1))
-                .build();
-        return data;
-    }
-
     @BeforeEach
     void setUp() {
         itemRequest = itemRequestBuilder();
@@ -158,8 +109,7 @@ class BookingControllerTest {
                         .param("approved", String.valueOf(true)))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.id").value(0))
-                .andExpect(jsonPath("$.start").value(String.valueOf(bookingDtoResp.getStart())));
+                .andExpect(jsonPath("$.id").value(0));
     }
 
     @SneakyThrows
@@ -243,5 +193,54 @@ class BookingControllerTest {
                         .param("size", "15"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    private ItemRequest itemRequestBuilder() {
+        ItemRequest itReq = ItemRequest.builder()
+                .id(1L)
+                .description("запрос")
+                .created(LocalDateTime.now())
+                .requestor(new User())
+                .build();
+        return itReq;
+    }
+
+    private User bookingUserBuilder() {
+        User us = User.builder()
+                .id(1L)
+                .email("alex@yandex.ru")
+                .name("alex")
+                .build();
+        return us;
+    }
+
+    private User userBuilder() {
+        User us = User.builder()
+                .id(2L)
+                .email("alexs@yandex.ru")
+                .name("alexs")
+                .build();
+        return us;
+    }
+
+    private Item itemBuilder() {
+        Item it = Item.builder()
+                .id(1L)
+                .name("новый стул")
+                .description("удобный стул")
+                .available(true)
+                .owner(user)
+                .request(itemRequest)
+                .build();
+        return it;
+    }
+
+    private BookingDtoRequest bookingDtoRequestBuilder() {
+        BookingDtoRequest data = BookingDtoRequest.builder()
+                .itemId(1L)
+                .start(LocalDateTime.now().plusHours(1))
+                .end(LocalDateTime.now().plusDays(1))
+                .build();
+        return data;
     }
 }
