@@ -55,25 +55,36 @@ class BookingControllerTest {
     private ItemRequest itemRequest;
     private ItemDto itemDto;
 
-    @BeforeEach
-    void setUp() {
-        itemRequest = ItemRequest.builder()
+    private ItemRequest itemRequestBuilder(){
+        ItemRequest itReq = ItemRequest.builder()
                 .id(1L)
                 .description("запрос")
                 .created(LocalDateTime.now())
                 .requestor(new User())
                 .build();
-        bookingUser = User.builder()
+        return itReq;
+    }
+
+    private User bookingUserBuilder(){
+        User us = User.builder()
                 .id(1L)
                 .email("alex@yandex.ru")
                 .name("alex")
                 .build();
-        user = User.builder()
+        return us;
+    }
+
+    private User userBuilder(){
+        User us = User.builder()
                 .id(2L)
                 .email("alexs@yandex.ru")
                 .name("alexs")
                 .build();
-        item = Item.builder()
+        return us;
+    }
+
+    private Item itemBuilder(){
+        Item it = Item.builder()
                 .id(1L)
                 .name("новый стул")
                 .description("удобный стул")
@@ -81,13 +92,26 @@ class BookingControllerTest {
                 .owner(user)
                 .request(itemRequest)
                 .build();
-        itemDto = ItemMapper.toItemDto(item);
-        bookingDtoRequest = BookingDtoRequest.builder()
+        return it;
+    }
+
+    private BookingDtoRequest bookingDtoRequestBuilder(){
+        BookingDtoRequest data = BookingDtoRequest.builder()
                 .itemId(1L)
                 .start(LocalDateTime.now().plusHours(1))
                 .end(LocalDateTime.now().plusDays(1))
                 .build();
+        return data;
+    }
 
+    @BeforeEach
+    void setUp() {
+        itemRequest = itemRequestBuilder();
+        bookingUser = bookingUserBuilder();
+        user = userBuilder();
+        item = itemBuilder();
+        itemDto = ItemMapper.toItemDto(item);
+        bookingDtoRequest = bookingDtoRequestBuilder();
         booking = BookingMapper.toBooking(bookingDtoRequest, item, bookingUser, BookingStatus.WAITING);
         bookingDtoResp = BookingMapper.toResponse(booking);
     }

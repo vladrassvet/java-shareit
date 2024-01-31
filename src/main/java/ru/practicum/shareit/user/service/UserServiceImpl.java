@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        // checkUser(user.getId());
         User oldUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NotFoundException("Пользователя с таким id = " + user.getId() + "  не существует"));
         if (user.getName() == null) {
