@@ -52,41 +52,22 @@ public class BookingClient extends BaseClient {
         }
 
         if (from != null && size != null) {
-            parameters = Map.of(
-                    "state", state,
-                    "from", from,
-                    "size", size
-            );
+            parameters = Map.of("state", state,"from", from,"size", size);
         } else if (from == null && size == null) {
-            parameters = Map.of(
-                    "state", state
-            );
+            parameters = Map.of("state", state);
         } else if (size == null) {
-            parameters = Map.of(
-                    "state", state,
-                    "from", from
-            );
+            parameters = Map.of("state", state,"from", from);
         } else {
-            parameters = Map.of(
-                    "state", state,
-                    "size", size
-            );
+            parameters = Map.of("state", state,"size", size);
         }
 
         if (parameters.containsKey("state") && parameters.containsKey("from") && parameters.containsKey("size")) {
-
             return get(ownerPath + "?state={state}&from={from}&size={size}", userId, parameters);
-
         } else if (!parameters.containsKey("from") && !parameters.containsKey("size")) {
-
             return get(ownerPath + "?state={state}", userId, parameters);
-
         } else if (!parameters.containsKey("size")) {
-
             return get(ownerPath + "?state={state}&from={from}", userId, parameters);
-
         } else {
-
             return get(ownerPath + "?state={state}&size={size}", userId, parameters);
         }
     }
