@@ -51,7 +51,6 @@ class BookingServiceImplTest {
     private BookingDtoRequest request;
     private Booking booking;
 
-
     @BeforeEach
     void setUp() {
         user = User.builder()
@@ -193,6 +192,7 @@ class BookingServiceImplTest {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
         assertThrows(NotFoundException.class, () -> bookingService.getBooking(booking.getId(), 5));
     }
+
 
     @Test
     void getUserBookings_whenStatusEqualsAll_thenReturnBookingList() {

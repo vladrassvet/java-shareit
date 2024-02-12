@@ -111,6 +111,21 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
+    void addBooking_whenInputValueNotValid_thenReturnThrows() {
+        bookingDtoRequest.setEnd(LocalDateTime.now().minusDays(1));
+        when(bookingService.addBooking(anyLong(), any(BookingDtoRequest.class)))
+                .thenReturn(booking);
+        mockMvc.perform(post("/bookings")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookingDtoRequest))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(USER_ID, "1"))
+                .andExpect(status().isBadRequest());
+        verify(bookingService, never()).addBooking(anyLong(), any(BookingDtoRequest.class));
+    }
+
+    @SneakyThrows
+    @Test
     void confirmationOrRejectionOfBooking() {
         when(bookingService.getStatus(anyLong(), anyLong(), anyBoolean())).thenReturn(booking);
 
@@ -119,8 +134,8 @@ class BookingControllerTest {
                         .param("approved", String.valueOf(true)))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.id").value(0));
-                //.andExpect(jsonPath("$.start").value(String.valueOf(bookingDtoResp.getStart())));
+                .andExpect(jsonPath("$.id").value(0))
+                .andExpect(jsonPath("$.start").value(String.valueOf(bookingDtoResp.getStart())));
     }
 
     @SneakyThrows

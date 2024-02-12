@@ -95,6 +95,7 @@ class UserServiceImplTest {
         verify(userRepository, never()).save(newUser);
     }
 
+
     @Test
     void getUserById_whenUserFound_thenReturnUser() {
         long userId = 0L;

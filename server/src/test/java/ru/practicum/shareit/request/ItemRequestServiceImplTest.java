@@ -86,7 +86,6 @@ class ItemRequestServiceImplTest {
         assertEquals(userBooker.getId(), itemRequest1.requestor.getId(), "Неверно отработал метод");
         assertEquals("!!!", itemRequest1.getDescription(), "Неверно отработал метод");
         assertEquals(now, itemRequest1.getCreated());
-
     }
 
     @Test

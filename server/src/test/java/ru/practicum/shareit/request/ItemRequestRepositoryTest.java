@@ -62,6 +62,7 @@ class ItemRequestRepositoryTest {
         itemRequestRepository.save(itemRequest2);
     }
 
+
     @Test
     void findAllByRequestorOrderByCreatedDesc() {
         List<ItemRequest> list = itemRequestRepository.findAllByRequestorOrderByCreatedDesc(user);
