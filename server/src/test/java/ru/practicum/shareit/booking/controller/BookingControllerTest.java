@@ -109,21 +109,6 @@ class BookingControllerTest {
                 .andExpect(jsonPath("$.end").isNotEmpty());
     }
 
-    /* @SneakyThrows
-    @Test
-    void addBooking_whenInputValueNotValid_thenReturnThrows() {
-        bookingDtoRequest.setEnd(LocalDateTime.now().minusDays(1));
-        when(bookingService.addBooking(anyLong(), any(BookingDtoRequest.class)))
-                .thenReturn(booking);
-        mockMvc.perform(post("/bookings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(bookingDtoRequest))
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(USER_ID, "1"));
-                //.andExpect(status().isBadRequest());
-        //verify(bookingService, never()).addBooking(anyLong(), any(BookingDtoRequest.class));
-    } */
-
     @SneakyThrows
     @Test
     void confirmationOrRejectionOfBooking() {
